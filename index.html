@@ -13,26 +13,36 @@
       <div class="nav-bar"></div>
 
       <div class="cart">Cart({{ cart }})</div>
-      
+
       <div class="product-display">
         <div class="product-container">
           <div class="product-image">
-            <img v-bind:src="image">
+            <img v-bind:src="image" :class="{ 'out-of-stock-img': inStock }">
           </div>
           <div class="product-info">
             <h1>{{ product }}</h1>
-            <p v-if="inStock">In Stock</p>
+            <p v-if="inventories > 0">In Stock</p>
+            <p v-else>In Stock</p>
             <p v-else>Out of Stock</p>
             <ul>
               <li v-for="detail in details">{{ detail }}</li>
             </ul>
 
-            <div 
-              v-for="variant in variants" 
-              :key="variant.id" 
-              @mouseover="updateImage(variant.image)" 
-            >{{ variant.color }}</div>
-            <button class="button" @click="addToCart">Add to Cart</button>
+            <div
+              v-for="variant in variants"
+              :key="variant.id"
+              @mouseover="updateImage(variant.image)"
+              class="color-circle"
+              :style="{ backgroundColor: variant.color }"
+            ></div>
+            <button class="button"
+                    @click="addToCart"
+                    :class="{ disabledButton: inventories <= 0 }"
+                    :disable="inventories <= 0">Add to Cart</button>
+            <button class="button"
+                    @click="removeToCart"
+                    :class="{ disabledButton: cart <= 0 }"
+                    :disable="cart <= 0">Remove to Cart</button>
           </div>
         </div>
       </div>
