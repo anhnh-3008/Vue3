@@ -5,7 +5,7 @@ app.component('product-display', {
       required: true
     }
   },
-  template: 
+  template:
   /*html*/
   `<div class="product-display">
     <div class="product-container">
@@ -23,22 +23,24 @@ app.component('product-display', {
           <li v-for="detail in details">{{ detail }}</li>
         </ul>
 
-        <div 
-          v-for="(variant, index) in variants" 
-          :key="variant.id" 
-          @mouseover="updateVariant(index)" 
-          class="color-circle" 
+        <div
+          v-for="(variant, index) in variants"
+          :key="variant.id"
+          @mouseover="updateVariant(index)"
+          class="color-circle"
           :style="{ backgroundColor: variant.color }">
         </div>
-        
-        <button 
-          class="button" 
-          :class="{ disabledButton: !inStock }" 
-          :disabled="!inStock" 
+
+        <button
+          class="button"
+          :class="{ disabledButton: !inStock }"
+          :disabled="!inStock"
           v-on:click="addToCart">
           Add to Cart
         </button>
 
+        <list-review :reviews="reviews" @remove-review="removeItemListReview"></list-review>
+        <review-form @add-review="updateListReview"></review-form>
       </div>
     </div>
   </div>`,
@@ -51,7 +53,8 @@ app.component('product-display', {
         variants: [
           { id: 2234, color: 'green', image: './assets/images/socks_green.jpg', quantity: 50 },
           { id: 2235, color: 'blue', image: './assets/images/socks_blue.jpg', quantity: 0 },
-        ]
+        ],
+        reviews: []
     }
   },
   methods: {
@@ -60,6 +63,12 @@ app.component('product-display', {
       },
       updateVariant(index) {
           this.selectedVariant = index
+      },
+      updateListReview(review) {
+        this.reviews.push(review)
+      },
+      removeItemListReview(index) {
+        this.reviews.splice(index, 1);
       }
   },
   computed: {
